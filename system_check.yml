@@ -1,0 +1,36 @@
+---
+- name: Check managed Linux server
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Display hostname
+      ansible.builtin.command: hostname
+      register: hostname_output
+      changed_when: false
+
+    - name: Show hostname
+      ansible.builtin.debug:
+        var: hostname_output.stdout
+
+    - name: Check uptime
+      ansible.builtin.command: uptime
+      register: uptime_output
+      changed_when: false
+
+    - name: Show uptime
+      ansible.builtin.debug:
+        var: uptime_output.stdout
+
+    - name: Check disk usage
+      ansible.builtin.command: df -h
+      register: disk_output
+      changed_when: false
+
+    - name: Show disk usage
+      ansible.builtin.debug:
+        var: disk_output.stdout_lines
+
+    - name: Display operating system
+      ansible.builtin.debug:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
