@@ -1,0 +1,30 @@
+---
+- name: Deploy custom Apache webpage
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Create custom homepage
+      ansible.builtin.copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>My OLAM Web Server</title>
+          </head>
+          <body>
+              <h1>Hello from Oracle Linux Automation Manager!</h1>
+              <p>This webpage was deployed automatically using OLAM and Ansible.</p>
+              <p>Managed server: {{ ansible_hostname }}</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Make sure Apache is running
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
