@@ -1,0 +1,22 @@
+---
+- name: Create Linux admin users
+  hosts: all
+  become: true
+
+  vars:
+    admin_users:
+      - name: admin1
+        shell: /bin/bash
+      - name: admin2
+        shell: /bin/bash
+
+  tasks:
+    - name: Create admin users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        shell: "{{ item.shell }}"
+        groups: wheel
+        append: true
+        create_home: true
+        state: present
+      loop: "{{ admin_users }}"
