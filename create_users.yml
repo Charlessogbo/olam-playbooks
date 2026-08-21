@@ -3,13 +3,16 @@
   hosts: all
   become: true
 
+  vars:
+    users:
+      - test1
+      - test2
+      - test3
+
   tasks:
     - name: Create multiple users
       ansible.builtin.user:
         name: "{{ item }}"
         state: present
         create_home: true
-      loop:
-        - test1
-        - test2
-        - test3
+      loop: "{{ users }}"
