@@ -1,0 +1,19 @@
+---
+- name: Patch Linux servers
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update all installed packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Display current kernel
+      ansible.builtin.command: uname -r
+      register: kernel_version
+      changed_when: false
+
+    - name: Show current kernel
+      ansible.builtin.debug:
+        msg: "Current kernel is {{ kernel_version.stdout }}"
